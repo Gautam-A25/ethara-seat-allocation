@@ -61,8 +61,17 @@ def get_employee(db: Session, employee_id: int) -> Employee:
     return employee
 
 
-def get_all_employees(db: Session):
-    return db.query(Employee).all()
+def get_all_employees(
+    db: Session,
+    skip: int = 0,
+    limit: int = 100,
+):
+    return (
+        db.query(Employee)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
 
 def update_employee(

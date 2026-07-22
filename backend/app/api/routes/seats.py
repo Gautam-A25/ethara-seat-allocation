@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.schemas.seat_allocation import (
@@ -55,9 +55,15 @@ def create_seat_route(
     summary="Get All Seats",
 )
 def get_all_seats_route(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=500),
     db: Session = Depends(get_db),
 ):
-    return get_all_seats(db)
+    return get_all_seats(
+        db,
+        skip=skip,
+        limit=limit,
+    )
 
 
 @router.get(

@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.database.dependencies import get_db
@@ -49,9 +49,15 @@ def create_employee_route(
     description="Retrieve all employees.",
 )
 def get_all_employees_route(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=500),
     db: Session = Depends(get_db),
 ):
-    return get_all_employees(db)
+    return get_all_employees(
+        db,
+        skip=skip,
+        limit=limit,
+    )
 
 @router.get(
     "/{employee_id}/seat-suggestions",

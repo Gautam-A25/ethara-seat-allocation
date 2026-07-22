@@ -46,13 +46,28 @@ def get_seat(db: Session, seat_id: int) -> Seat:
     return seat
 
 
-def get_all_seats(db: Session):
-    return db.query(Seat).all()
+def get_all_seats(
+    db: Session,
+    skip: int = 0,
+    limit: int = 100,
+):
+    return (
+        db.query(Seat)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
-def get_available_seats(db: Session):
+def get_available_seats(
+    db: Session,
+    skip: int = 0,
+    limit: int = 100,
+):
     return (
         db.query(Seat)
         .filter(Seat.status == SeatStatus.AVAILABLE)
+        .offset(skip)
+        .limit(limit)
         .all()
     )
 
